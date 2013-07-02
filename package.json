@@ -28,6 +28,6 @@
     "coverage": "jscov --expand src .cov && JSCOV=.cov mocha --timeout 10000  --compilers coffee:coffee-script --reporter mocha-term-cov-reporter tests/**/*.coffee || exit 0",
     "test": "mocha -b --timeout 10000 --compilers coffee:coffee-script tests/**/*.coffee",
     "deploy": "git push heroku master",
-    "start": "nodemon ./src/start.coffee"
+    "start": "nodemon ./src/app.coffee"
   }
 }
