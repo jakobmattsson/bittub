@@ -1,0 +1,33 @@
+{
+  "name": "bittub",
+  "description": "Relax, bits!",
+  "version": "0.1.0",
+  "private": true,
+  "author": "Lean Machine <support@leanmachine.se> (http://leanmachine.se)",
+  "contributors": [ 
+    "Jakob Mattsson <jakob@leanmachine.se> (http://jakobmattsson.se)"
+  ],
+  "main": "./src/app.coffee",
+  "engines": {
+    "npm": "1.1.x",
+    "node": "0.8.x"
+  },
+  "dependencies": {
+    "nconf": "0.6.7",
+    "coffee-script": "1.6.3",
+    "manikin-mongodb": "0.10.5",
+    "express": "3.3.1"
+  },
+  "devDependencies": {
+    "jscov": "0.5.3",
+    "mocha": "1.12.0",
+    "mocha-term-cov-reporter": "0.1.0",
+    "nodemon": "0.7.8"
+  },
+  "scripts": {
+    "coverage": "jscov --expand src .cov && JSCOV=.cov mocha --timeout 10000  --compilers coffee:coffee-script --reporter mocha-term-cov-reporter tests/**/*.coffee || exit 0",
+    "test": "mocha -b --timeout 10000 --compilers coffee:coffee-script tests/**/*.coffee",
+    "deploy": "git push heroku master",
+    "start": "nodemon ./src/start.coffee"
+  }
+}
