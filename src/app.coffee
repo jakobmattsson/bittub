@@ -1,6 +1,7 @@
 express = require 'express'
 manikin = require 'manikin-mongodb'
 nconf = require 'nconf'
+resterTools = require 'rester-tools'
 
 
 
@@ -31,6 +32,9 @@ nconf.env().argv().defaults
 app = express()
 db = manikin.create()
 app.use(express.bodyParser())
+app.use(resterTools.replaceContentTypeMiddleware({ 'text/plain': 'application/json', '': 'application/json' }))
+app.use(resterTools.corsMiddleware())
+
 
 
 jsonErr = (res, f) ->
