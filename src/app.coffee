@@ -103,7 +103,7 @@ app.get '/accounts/:account/rss', (req, res) ->
         date: item.timestamp
 
     res.set('content-type', 'application/rss+xml')
-    res.send(feed.xml())
+    res.send(feed.xml(true))
 
 
 app.get '/tubs', (req, res) ->
