@@ -13,6 +13,7 @@
     "node": "0.8.x"
   },
   "dependencies": {
+    "rss": "0.1.0",
     "nconf": "0.6.7",
     "rester-tools": "0.6.2",
     "coffee-script": "1.6.3",
