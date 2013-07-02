@@ -1,7 +1,9 @@
+util = require 'util'
 express = require 'express'
 manikin = require 'manikin-mongodb'
 nconf = require 'nconf'
 resterTools = require 'rester-tools'
+rss = require 'rss'
 
 
 
@@ -25,6 +27,7 @@ nconf.env().argv().defaults
   mongo: 'mongodb://localhost/bittub'
   NODE_ENV: 'development'
   PORT: 7777
+  hostname: 'localhost'
 
 
 
@@ -34,6 +37,10 @@ db = manikin.create()
 app.use(express.bodyParser())
 app.use(resterTools.replaceContentTypeMiddleware({ 'text/plain': 'application/json', '': 'application/json' }))
 app.use(resterTools.corsMiddleware())
+
+
+bittubUrl = 'http://' + nconf.get('hostname') + ":" + nconf.get('PORT')
+
 
 
 
@@ -71,6 +78,31 @@ app.get '/accounts/:account/tubs', (req, res) ->
 app.get '/accounts/:account/tubs/:tub', (req, res) ->
   db.getOne 'tubs', { filter: { id: req.params.tub, account: req.params.account } }, jsonErr res, (data) ->
     res.json(data)
+
+
+app.get '/accounts/:account/rss', (req, res) ->
+  db.list 'tubs', { account: req.params.account }, jsonErr res, (data) ->
+
+    data.sort (a, b) ->
+      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+
+    feed = new rss
+      title: "BitTub feed for account #{req.params.account}"
+      description: "BitTub feed for account #{req.params.account}"
+      feed_url: "#{bittubUrl}/accounts/#{req.params.account}/rss"
+      site_url: bittubUrl
+      # image_url: 'http://example.com/icon.png'
+      author: 'BitTub'
+
+    data.forEach (item) ->
+      feed.item
+        title: "#{item.ip}+#{new Date(item.timestamp).getTime()}"
+        description: util.inspect(item.data)
+        url: "#{bittubUrl}/accounts/#{item.account}/tubs/#{item.id}"
+        date: item.timestamp
+
+    res.set('content-type', 'application/rss+xml')
+    res.send(feed.xml())
 
 
 app.get '/tubs', (req, res) ->
