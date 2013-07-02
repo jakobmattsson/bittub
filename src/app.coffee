@@ -27,6 +27,7 @@ nconf.env().argv().defaults
   mongo: 'mongodb://localhost/bittub'
   NODE_ENV: 'development'
   PORT: 7777
+  PORT_EXTERNAL: 7777
   hostname: 'localhost'
 
 
@@ -39,7 +40,7 @@ app.use(resterTools.replaceContentTypeMiddleware({ 'text/plain': 'application/js
 app.use(resterTools.corsMiddleware())
 
 
-bittubUrl = 'http://' + nconf.get('hostname') + ":" + nconf.get('PORT')
+bittubUrl = 'http://' + nconf.get('hostname') + ":" + nconf.get('PORT_EXTERNAL')
 
 
 
